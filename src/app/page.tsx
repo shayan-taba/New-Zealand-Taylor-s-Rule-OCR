@@ -183,18 +183,23 @@ export default function Home() {
       let prevOCR: number | null = null;
 
       const dataWithOCR = updatedData.map((entry: DataEntry, index: number) => {
+        console.log(`Processing entry for ${entry.quarter}:`, entry); // Log the entire entry
+      
         const targetInflation = entry.mandateType.midpoint;
         const inflationRate = entry.papc || 0;
-
+      
+        if (entry.outputGap === null || entry.longTermNominalNIR === null) {
+          console.warn(`Missing values for ${entry.quarter}: outputGap or longTermNominalNIR`);
+        }
+      
         const taylorOCR = calculateTaylorOCR(
           inflationRate,
           entry.outputGap,
           entry.longTermNominalNIR,
           targetInflation
         );
-
         console.log(`Taylor OCR for ${entry.quarter}:`, taylorOCR); // Log the calculated Taylor OCR
-
+      
         const inertialOCR = calculateInertialTaylorOCR(
           prevOCR,
           inflationRate,
@@ -203,17 +208,17 @@ export default function Home() {
           targetInflation,
           entry.ocr
         );
-
         console.log(`Inertial OCR for ${entry.quarter}:`, inertialOCR); // Log the calculated Inertial OCR
-
+      
         prevOCR = entry.ocr;
-
+      
         return {
           ...entry,
           taylorOCR,
           inertialOCR,
         };
       });
+      
 
       console.log("Final Data with OCR Calculations:", dataWithOCR); // Log the final data with OCRs added
 
