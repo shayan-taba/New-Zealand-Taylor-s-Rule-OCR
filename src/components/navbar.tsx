@@ -1,37 +1,42 @@
-// components/Navbar.tsx
-import { AppBar, Box, Tab, Tabs, Toolbar, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+// app/components/Navbar.tsx
+
+"use client";
+
+import { AppBar, Button, Toolbar } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const router = useRouter();
-  const currentRoute = router.pathname;
+  const [activePage, setActivePage] = useState<string>('');
+
+  useEffect(() => {
+    setActivePage(window.location.pathname);
+  }, []);
 
   return (
-    <AppBar position="static" sx={{ mb: 4 }}>
+    <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Economic Projections Dashboard
-        </Typography>
-        <Tabs value={currentRoute} textColor="inherit" indicatorColor="secondary">
-          <Tab
-            label="Results"
-            value="/results"
-            onClick={() => router.push("/results")}
-            sx={{
-              fontWeight: currentRoute === "/results" ? "bold" : "normal",
-              color: currentRoute === "/results" ? "orange" : "white",
-            }}
-          />
-          <Tab
-            label="Methodology"
-            value="/methodology"
-            onClick={() => router.push("/methodology")}
-            sx={{
-              fontWeight: currentRoute === "/methodology" ? "bold" : "normal",
-              color: currentRoute === "/methodology" ? "orange" : "white",
-            }}
-          />
-        </Tabs>
+        <Button
+          color="inherit"
+          onClick={() => router.push("/")}
+          sx={{
+            backgroundColor: activePage === "/" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+            color: activePage === "/" ? "white" : "inherit",
+          }}
+        >
+          Results
+        </Button>
+        <Button
+          color="inherit"
+          onClick={() => router.push("/methodology")}
+          sx={{
+            backgroundColor: activePage === "/methodology" ? "rgba(255, 255, 255, 0.1)" : "transparent",
+            color: activePage === "/methodology" ? "white" : "inherit",
+          }}
+        >
+          Methodology
+        </Button>
       </Toolbar>
     </AppBar>
   );
