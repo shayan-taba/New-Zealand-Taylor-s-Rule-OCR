@@ -1,8 +1,8 @@
 "use client";
 import jsFileDownload from "js-file-download";
 import { useEffect, useState } from "react";
-import { IconButton } from '@mui/material';
-import { Download } from "@mui/icons-material";  // Import the Download icon
+import { IconButton } from "@mui/material";
+import { Download } from "@mui/icons-material"; // Import the Download icon
 import { fetchData } from "@/lib/fetchData";
 import {
   Container,
@@ -186,14 +186,16 @@ export default function Home() {
 
       const dataWithOCR = updatedData.map((entry: DataEntry, index: number) => {
         //console.log(`Processing entry for ${entry.quarter}:`, entry); // Log the entire entry
-      
+
         const targetInflation = entry.mandateType.midpoint;
         const inflationRate = entry.papc || 0;
-      
+
         if (entry.outputGap === null || entry.longTermNominalNIR === null) {
-          console.warn(`Missing values for ${entry.quarter}: outputGap or longTermNominalNIR`);
+          console.warn(
+            `Missing values for ${entry.quarter}: outputGap or longTermNominalNIR`
+          );
         }
-      
+
         const taylorOCR = calculateTaylorOCR(
           inflationRate,
           entry.outputGap,
@@ -201,7 +203,7 @@ export default function Home() {
           targetInflation
         );
         //console.log(`Taylor OCR for ${entry.quarter}:`, taylorOCR); // Log the calculated Taylor OCR
-      
+
         const inertialOCR = calculateInertialTaylorOCR(
           prevOCR,
           inflationRate,
@@ -211,16 +213,15 @@ export default function Home() {
           entry.ocr
         );
         //console.log(`Inertial OCR for ${entry.quarter}:`, inertialOCR); // Log the calculated Inertial OCR
-      
+
         prevOCR = entry.ocr;
-      
+
         return {
           ...entry,
           taylorOCR,
           inertialOCR,
         };
       });
-      
 
       //console.log("Final Data with OCR Calculations:", dataWithOCR); // Log the final data with OCRs added
 
@@ -254,11 +255,11 @@ export default function Home() {
 
   const handleDownload = () => {
     const csvRows = [];
-    
+
     // Get all keys from the first entry in the filtered data to use as headers
     const headers = Object.keys(filteredData[0]);
     csvRows.push(headers.join(","));
-    
+
     // Iterate over each entry to create a row
     filteredData.forEach((entry: any) => {
       const row = headers.map((key) => {
@@ -267,13 +268,10 @@ export default function Home() {
       });
       csvRows.push(row.join(","));
     });
-  
+
     const csvString = csvRows.join("\n");
     jsFileDownload(csvString, "filtered_data.csv");
   };
-  
-  
-
 
   return (
     <Container>
@@ -369,14 +367,32 @@ export default function Home() {
         </Box>
 
         {/* Table Section */}
-        <Box mb={4} display="flex" justifyContent="flex-start" gap={"1rem"} alignItems="center">
-          <Typography variant="h6" gutterBottom>
-            Data Table
-          </Typography>
-          <IconButton onClick={handleDownload} color="primary">
-            <Download />
-          </IconButton>
-        </Box>
+<Box mb={4}>
+  <Box
+    display="flex"
+    justifyContent="flex-start"
+    gap={"1rem"}
+    alignItems="center"
+  >
+    <Typography variant="h6" gutterBottom>
+      Data Table
+    </Typography>
+  </Box>
+  
+  <Box display="flex" justifyContent="flex-start" gap={"1rem"} alignItems="center" mt={2}>
+    <Typography variant="body1" sx={{ fontWeight: "light", fontStyle: "italic" }}>
+      Click the download icon to get the filtered data in CSV format alongside the source data behind the calculations
+    </Typography>
+    <IconButton
+      onClick={handleDownload}
+      color="primary"
+      aria-label="Download filtered data"
+    >
+      <Download />
+    </IconButton>
+  </Box>
+</Box>
+
 
         <TableContainer component={Paper}>
           <Table>

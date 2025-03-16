@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from 'react';
-import { AppBar, Box, Toolbar, Button, IconButton, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Button, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 
@@ -34,12 +34,14 @@ export default function Navbar() {
           >
             Results
           </Button>
+          <Typography variant="body1" sx={{ color: 'white', mx: 3 }}>
+            |
+          </Typography> {/* Pipe separator */}
           <Button
             onClick={() => router.push("/methodology")}
             sx={{
               textTransform: "none",
               color: "white",
-              ml: 2, // Margin left to space buttons
               borderBottom: isActive("/methodology") ? `2px solid #f5f5f5` : "none", // Add underline for active page
               "&:hover": {
                 backgroundColor: "rgba(255, 255, 255, 0.1)", // Highlight on hover
