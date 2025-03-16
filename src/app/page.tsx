@@ -21,16 +21,25 @@ import {
 } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { useRouter } from "next/navigation";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 type DataEntry = {
-  date: string;
+  date: string; // YYYY-MM-DD
   quarter: string;
   outputGap: number | null;
   papc: number | null;
+  isProjection: boolean;
   ocr: number | null;
   longTermNominalNIR: number | null;
+  mandateType: {
+    range: string;
+    lower: number;
+    upper: number;
+    midpoint: number;
+    mandate: string;
+  };
   taylorOCR?: number | null;
   inertialOCR?: number | null;
 };
@@ -59,59 +68,85 @@ const calculateInertialTaylorOCR = (
 ): number | null => {
   if (outputGap === null || longTermNominalNIR === null) return null;
   const taylorOCR = calculateTaylorOCR(inflationRate, outputGap, longTermNominalNIR, targetInflation);
-  if (previousOCR === null) return taylorOCR;
+  if (previousOCR === null) return taylorOCR; // For the first entry, use Taylor rule directly
   return a_i * previousOCR + a_t * (longTermNominalNIR + a_pi * (inflationRate - targetInflation) + a_y * outputGap);
 };
 
-const generateGraphData = (data: DataEntry[]) => {
+const generateGraphData = (data: DataEntry[], hideTaylorOCR: boolean, hideInertialOCR: boolean) => {
   const labels = data.map((entry) => entry.quarter);
+  const ocrData = data.map((entry) => entry.ocr ?? 0);  // Replace null with 0
+  const taylorOCRData = data.map((entry) => entry.taylorOCR ?? 0); // Replace null with 0
+  const inertialOCRData = data.map((entry) => entry.inertialOCR ?? 0); // Replace null with 0
+
+  const datasets = [
+    {
+      label: "OCR",
+      data: ocrData,
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgba(75, 192, 192, 0.2)",
+      fill: true,
+    },
+  ];
+
+  if (!hideTaylorOCR) {
+    datasets.push({
+      label: "Taylor OCR",
+      data: taylorOCRData,
+      borderColor: "rgb(255, 99, 132)",
+      backgroundColor: "rgba(255, 99, 132, 0.2)",
+      fill: true,
+    });
+  }
+
+  if (!hideInertialOCR) {
+    datasets.push({
+      label: "Inertial Taylor OCR",
+      data: inertialOCRData,
+      borderColor: "rgb(153, 102, 255)",
+      backgroundColor: "rgba(153, 102, 255, 0.2)",
+      fill: true,
+    });
+  }
+
   return {
     labels,
-    datasets: [
-      {
-        label: "OCR",
-        data: data.map((entry) => entry.ocr || 0),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        fill: false,
-      },
-      {
-        label: "Taylor OCR",
-        data: data.map((entry) => entry.taylorOCR || 0),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        fill: false,
-      },
-      {
-        label: "Inertial Taylor OCR",
-        data: data.map((entry) => entry.inertialOCR || 0),
-        borderColor: "rgb(153, 102, 255)",
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
-        fill: false,
-      },
-    ],
+    datasets,
   };
 };
 
 export default function Home() {
   const [data, setData] = useState<DataEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hideTaylorOCR, setHideTaylorOCR] = useState(false);
+  const [hideInertialOCR, setHideInertialOCR] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetchData().then((result: any) => {
+      const updatedData = result.map((entry: DataEntry) => ({
+        ...entry,
+        taylorOCR: null,
+        inertialOCR: null,
+      }));
+
       let prevOCR: number | null = null;
-      const dataWithOCR = result.map((entry: DataEntry) => {
-        const targetInflation = 2.0; 
+
+      const dataWithOCR = updatedData.map((entry: DataEntry, index: number) => {
+        const targetInflation = entry.mandateType.midpoint;
         const inflationRate = entry.papc || 0;
+
         const taylorOCR = calculateTaylorOCR(inflationRate, entry.outputGap, entry.longTermNominalNIR, targetInflation);
         const inertialOCR = calculateInertialTaylorOCR(prevOCR, inflationRate, entry.outputGap, entry.longTermNominalNIR, targetInflation);
-        prevOCR = entry.ocr;
+
+        prevOCR = entry.ocr; // Use actual OCR as the previous OCR for the next quarter
+
         return {
           ...entry,
           taylorOCR,
           inertialOCR,
         };
       });
+
       setData(dataWithOCR);
       setLoading(false);
     });
@@ -125,29 +160,65 @@ export default function Home() {
     );
   }
 
-  const graphData = generateGraphData(data);
+  const graphData = generateGraphData(data, hideTaylorOCR, hideInertialOCR);
 
   return (
     <Container>
       <AppBar position="static">
         <Toolbar>
-          <Button color="inherit" href="#methodology">Methodology</Button>
-          <Button color="inherit" href="#results">Results</Button>
+          <Button color="inherit" onClick={() => router.push("/methodology")}>
+            Methodology
+          </Button>
+          <Button color="inherit" onClick={() => router.push("/")}>
+            Results
+          </Button>
         </Toolbar>
       </AppBar>
 
-      <Box mt={4} id="results">
-        <Typography variant="h4" gutterBottom>Economic Projections</Typography>
-        <Line data={graphData} />
+      <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
+        Economic Projections
+      </Typography>
+
+      <Box mb={4}>
+        <Typography variant="h6" paragraph>
+          <strong>Taylor Rule Equation:</strong>
+        </Typography>
+        <Typography variant="body1" sx={{ fontFamily: "monospace" }}>
+          i<sub>t</sub> = π<sub>t</sub> + r<sub>t</sub><sup>r</sup> + a<sub>π</sub>(π<sub>t</sub> - π<sub>t</sub><sup>∗</sup>) + a<sub>y</sub>y<sub>t</sub>
+        </Typography>
+
+        <Divider sx={{ my: 2 }} />
+
+        <Typography variant="h6" paragraph>
+          <strong>Inertial Taylor Rule Equation:</strong>
+        </Typography>
+        <Typography variant="body1" sx={{ fontFamily: "monospace" }}>
+          i<sub>t</sub> = a<sub>i</sub> × i<sub>t-1</sub> + a<sub>t</sub> [r<sub>t</sub><sup>n</sup> + a<sub>π</sub>(π<sub>t</sub> - π<sub>t</sub><sup>∗</sup>) + a<sub>y</sub>y<sub>t</sub>]
+        </Typography>
       </Box>
 
-      <TableContainer component={Paper} sx={{ mt: 4 }}>
+      {/* Graph Section */}
+      <Box mb={4}>
+        <Line data={graphData} options={{ responsive: true, maintainAspectRatio: false }} height={400} />
+      </Box>
+
+      {/* Toggle Lines Section */}
+      <Box mb={4}>
+        <Button variant="outlined" onClick={() => setHideTaylorOCR(!hideTaylorOCR)}>
+          {hideTaylorOCR ? "Show" : "Hide"} Taylor OCR
+        </Button>
+        <Button variant="outlined" onClick={() => setHideInertialOCR(!hideInertialOCR)}>
+          {hideInertialOCR ? "Show" : "Hide"} Inertial OCR
+        </Button>
+      </Box>
+
+      {/* Table Section */}
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Date</TableCell>
               <TableCell>Quarter</TableCell>
-              <TableCell>OCR</TableCell>
               <TableCell>Taylor OCR</TableCell>
               <TableCell>Inertial OCR</TableCell>
             </TableRow>
@@ -157,7 +228,6 @@ export default function Home() {
               <TableRow key={entry.date}>
                 <TableCell>{entry.date}</TableCell>
                 <TableCell>{entry.quarter}</TableCell>
-                <TableCell>{entry.ocr?.toFixed(2)}</TableCell>
                 <TableCell>{entry.taylorOCR?.toFixed(2)}</TableCell>
                 <TableCell>{entry.inertialOCR?.toFixed(2)}</TableCell>
               </TableRow>
@@ -165,14 +235,6 @@ export default function Home() {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Box mt={4} id="methodology">
-        <Typography variant="h5">Methodology</Typography>
-        <Typography>
-          The data is sourced from the latest RBNZ Monetary Policy Statement. For more details, visit:
-          <a href="https://www.rbnz.govt.nz/hub/publications/monetary-policy-statement/2025/feb-1902-dhs/monetary-policy-statement-february-2025" target="_blank" rel="noopener noreferrer">RBNZ MPS February 2025</a>
-        </Typography>
-      </Box>
     </Container>
   );
 }
