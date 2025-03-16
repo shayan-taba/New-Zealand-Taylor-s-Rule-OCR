@@ -367,32 +367,41 @@ export default function Home() {
         </Box>
 
         {/* Table Section */}
-<Box mb={4}>
-  <Box
-    display="flex"
-    justifyContent="flex-start"
-    gap={"1rem"}
-    alignItems="center"
-  >
-    <Typography variant="h6" gutterBottom>
-      Data Table
-    </Typography>
-  </Box>
-  
-  <Box display="flex" justifyContent="flex-start" gap={"1rem"} alignItems="center" mt={2}>
-    <Typography variant="body1" sx={{ fontWeight: "light", fontStyle: "italic" }}>
-      Click the download icon to get the filtered data in CSV format alongside the source data behind the calculations
-    </Typography>
-    <IconButton
-      onClick={handleDownload}
-      color="primary"
-      aria-label="Download filtered data"
-    >
-      <Download />
-    </IconButton>
-  </Box>
-</Box>
+        <Box mb={4}>
+          <Box
+            display="flex"
+            justifyContent="flex-start"
+            gap={"1rem"}
+            alignItems="center"
+          >
+            <Typography variant="h6" gutterBottom>
+              Data Table
+            </Typography>
+          </Box>
 
+          <Box
+            display="flex"
+            justifyContent="flex-start"
+            gap={"1rem"}
+            alignItems="center"
+            mt={2}
+          >
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: "light", fontStyle: "italic" }}
+            >
+              Click the download icon to get the filtered data in CSV format
+              alongside the source data behind the calculations
+            </Typography>
+            <IconButton
+              onClick={handleDownload}
+              color="primary"
+              aria-label="Download filtered data"
+            >
+              <Download />
+            </IconButton>
+          </Box>
+        </Box>
 
         <TableContainer component={Paper}>
           <Table>

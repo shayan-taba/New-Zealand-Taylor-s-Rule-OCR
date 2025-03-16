@@ -10,7 +10,7 @@ export default function Methodology() {
       <Navbar />
 
       {/* Title */}
-      <Typography variant="h3" sx={{ mt: 4, fontWeight: "bold" }}>
+      <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
         Methodology
       </Typography>
 
