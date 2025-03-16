@@ -42,6 +42,7 @@ const parseNIRData = (csvFilePath: string): Promise<Map<string, number>> => {
         const parser = fileStream.pipe(csvParse.parse({ columns: true, skip_empty_lines: true }));
 
         parser.on("data", (row: any) => {
+            console.log(row)
             const dateStr = row["Date"];
             const nirValue = parseFloat(row["NIR"]); // Long-term NIR (% nominal)
             if (dateStr && !isNaN(nirValue)) {
@@ -103,6 +104,7 @@ export async function GET() {
         // Load and parse NIR data from the CSV file
         const nirFilePath = path.join(process.cwd(), "public", "NIR.csv");
         const nirDataMap = await parseNIRData(nirFilePath);
+        console.log(nirDataMap)
 
         // Extract data from row 8 onward
         const extractedData = rawData.slice(7).map((row: any): {
