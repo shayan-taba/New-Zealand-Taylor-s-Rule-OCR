@@ -144,9 +144,13 @@ export async function GET() {
                 mandateType: { range, lower, upper, midpoint, mandate },
 
             };
-        }).filter(Boolean); // Remove nulls
-        console.log(extractedData)
-        return NextResponse.json({ success: true, data: extractedData });
+        }).filter((entry): entry is NonNullable<typeof entry> => entry !== null); // Ensure nulls are removed
+
+        // Filter out projections
+        const nonProjectionData = extractedData.filter(entry => !entry.isProjection);
+        console.log(nonProjectionData);
+
+        return NextResponse.json({ success: true, data: nonProjectionData });
     } catch (error) {
         console.log(error);
         return NextResponse.json({ success: false, error: (error as Error).message }, { status: 500 });
