@@ -24,7 +24,7 @@ const Footer = () => {
 
           {/* Email Link */}
           <IconButton
-            href="mailto:s.taba.main@gmail.com"
+            href="mailto:nz.taylor.rule.tool@gmail.com"
             aria-label="Email"
           >
             <EmailIcon />

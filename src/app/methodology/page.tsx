@@ -258,7 +258,7 @@ export default function Methodology() {
         sx={{ mt: 2, display: "flex", alignItems: "center", gap: 1 }}
       >
         <Email fontSize="small" />
-        <Link href="mailto:s.taba.main@gmail.com">
+        <Link href="mailto:nz.taylor.rule.tool@gmail.com">
           Contact: s.taba.main@gmail.com
         </Link>
       </Typography>
