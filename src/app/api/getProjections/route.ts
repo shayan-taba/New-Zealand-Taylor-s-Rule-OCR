@@ -64,16 +64,16 @@ const parseNIRData = (csvFilePath: string): Promise<Map<string, number>> => {
     });
 };
 
-// Helper function to parse date from MM/DD/YYYY format
 const parseDate = (dateStr: string): string | null => {
     const [day, month, year] = dateStr.split("/").map(Number);
     if (day && month && year) {
-        // Convert to a proper Date object and return an ISO string
-        const date = new Date(year, month, day);
+        // Create a date object using UTC to avoid local timezone discrepancies
+        const date = new Date(Date.UTC(year, month - 1, day));
         return date.toISOString().split('T')[0]; // Return date in YYYY-MM-DD format
     }
     return null; // Invalid date format
 };
+
 
 
 export async function GET() {
