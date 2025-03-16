@@ -125,7 +125,7 @@ const generateGraphData = (data: DataEntry[]) => {
     labels,
     datasets: [
       {
-        label: "OCR",
+        label: "Quarterly Average Actual OCR",
         data: ocrData,
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
