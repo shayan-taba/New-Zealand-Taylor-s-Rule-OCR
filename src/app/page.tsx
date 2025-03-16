@@ -53,7 +53,7 @@ type DataEntry = {
   quarter: string;
   outputGap: number | null;
   papc: number | null;
-  isProjection: boolean;
+  //isProjection: boolean;
   ocr: number | null;
   longTermNominalNIR: number | null;
   mandateType: {
@@ -65,55 +65,6 @@ type DataEntry = {
   };
   taylorOCR?: number | null;
   inertialOCR?: number | null;
-};
-
-const a_i = 0.85;
-const a_t = 0.15;
-const a_pi = 0.5;
-const a_y = 0.5;
-
-const calculateTaylorOCR = (
-  inflationRate: number,
-  outputGap: number | null,
-  longTermNominalNIR: number | null,
-  targetInflation: number
-): number | null => {
-  if (outputGap === null || longTermNominalNIR === null) return null;
-  return (
-    longTermNominalNIR +
-    a_pi * (inflationRate - targetInflation) +
-    a_y * outputGap
-  );
-};
-
-const calculateInertialTaylorOCR = (
-  previousOCR: number | null,
-  inflationRate: number,
-  outputGap: number | null,
-  longTermNominalNIR: number | null,
-  targetInflation: number,
-  actualOCR: number | null // Added parameter for actual OCR
-): number | null => {
-  if (outputGap === null || longTermNominalNIR === null) return null;
-
-  // If it's the first entry, use the actual OCR instead of the Taylor OCR for inertial calculation
-  if (previousOCR === null) return actualOCR; // Use actual OCR for first entry
-
-  // Otherwise, calculate the inertial OCR as usual
-  const taylorOCR = calculateTaylorOCR(
-    inflationRate,
-    outputGap,
-    longTermNominalNIR,
-    targetInflation
-  );
-
-  return (
-    a_i * previousOCR +
-    a_t *
-      (longTermNominalNIR +
-        a_pi * (inflationRate - targetInflation) +
-        a_y * outputGap)
-  );
 };
 
 const generateGraphData = (data: DataEntry[]) => {
@@ -172,67 +123,14 @@ export default function Home() {
 
   useEffect(() => {
     fetchData().then((result: any) => {
-      //console.log("Fetched Data:", result); // Log the raw fetched data
-
-      const updatedData = result.map((entry: DataEntry) => ({
-        ...entry,
-        taylorOCR: null,
-        inertialOCR: null,
-      }));
-
-      //console.log("Updated Data with Default OCRs:", updatedData); // Log the updated data with default nulls for OCRs
-
-      let prevOCR: number | null = null;
-
-      const dataWithOCR = updatedData.map((entry: DataEntry, index: number) => {
-        //console.log(`Processing entry for ${entry.quarter}:`, entry); // Log the entire entry
-
-        const targetInflation = entry.mandateType.midpoint;
-        const inflationRate = entry.papc || 0;
-
-        if (entry.outputGap === null || entry.longTermNominalNIR === null) {
-          console.warn(
-            `Missing values for ${entry.quarter}: outputGap or longTermNominalNIR`
-          );
-        }
-
-        const taylorOCR = calculateTaylorOCR(
-          inflationRate,
-          entry.outputGap,
-          entry.longTermNominalNIR,
-          targetInflation
-        );
-        //console.log(`Taylor OCR for ${entry.quarter}:`, taylorOCR); // Log the calculated Taylor OCR
-
-        const inertialOCR = calculateInertialTaylorOCR(
-          prevOCR,
-          inflationRate,
-          entry.outputGap,
-          entry.longTermNominalNIR,
-          targetInflation,
-          entry.ocr
-        );
-        //console.log(`Inertial OCR for ${entry.quarter}:`, inertialOCR); // Log the calculated Inertial OCR
-
-        prevOCR = entry.ocr;
-
-        return {
-          ...entry,
-          taylorOCR,
-          inertialOCR,
-        };
-      });
-
-      //console.log("Final Data with OCR Calculations:", dataWithOCR); // Log the final data with OCRs added
-
-      setData(dataWithOCR);
+      setData(result);
       setLoading(false);
 
-      const firstQuarter = dataWithOCR[0]?.quarter || "";
-      const lastQuarter = dataWithOCR[dataWithOCR.length - 1]?.quarter || "";
+      const firstQuarter = result[0]?.quarter || "";
+      const lastQuarter = result[result.length - 1]?.quarter || "";
       setStartQuarter(firstQuarter);
       setEndQuarter(lastQuarter);
-      setFilteredData(dataWithOCR);
+      setFilteredData(result);
     });
   }, []);
 
@@ -264,7 +162,24 @@ export default function Home() {
     filteredData.forEach((entry: any) => {
       const row = headers.map((key) => {
         const value = entry[key];
-        return value !== null && value !== undefined ? value.toString() : "-"; // Handle null/undefined values
+        if (value !== null && value !== undefined) {
+          // Check if the value is an object (to avoid stringifying an already stringified object)
+          if (typeof value === "object") {
+            // Escape quotes and wrap the value in double quotes
+            return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
+          }
+
+          // If it's a simple string, number, or boolean, wrap in quotes if it contains a comma or newline
+          if (
+            typeof value === "string" &&
+            (value.includes(",") || value.includes("\n"))
+          ) {
+            return `"${value.replace(/"/g, '""')}"`;
+          }
+
+          return value.toString(); // Otherwise, just convert to string
+        }
+        return "-"; // Handle null/undefined values
       });
       csvRows.push(row.join(","));
     });

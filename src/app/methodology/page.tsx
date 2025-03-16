@@ -2,6 +2,7 @@ import { Container, Typography, Link, Box, Stack } from "@mui/material";
 import { Email, GitHub } from "@mui/icons-material";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { latestMPS } from "../config";
 
 export default function Methodology() {
   return (
@@ -16,12 +17,12 @@ export default function Methodology() {
 
       {/* Introduction */}
       <Typography variant="body1" sx={{ mt: 2, lineHeight: 1.7 }}>
-        This website utilizes data from the Reserve Bank of New Zealand's (RBNZ){" "}
+        This website utilizes data from the latest Reserve Bank of New Zealand's (RBNZ) Monetary Policy Statement{" "}
         <Link
-          href="https://www.rbnz.govt.nz/-/media/project/sites/rbnz/files/publications/monetary-policy-statements/2025/feb-19224/mpsfeb25-data.xlsx"
+          href={latestMPS.mpsLink}
           target="_blank"
         >
-          February 2025 Monetary Policy Statement (MPS)
+           ({latestMPS.month} {latestMPS.year} MPS)
         </Link>{" "}
         to provide a theoretical benchmark for the Official Cash Rate (OCR).
         Using the Taylor Rule and Inertial Taylor Rule, it models how the OCR

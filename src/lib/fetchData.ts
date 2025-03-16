@@ -1,7 +1,7 @@
 // lib/fetchData.ts
 export async function fetchData() {
     try {
-      const response = await fetch("/api/getProjections");
+      const response = await fetch("/api/getData");
       console.log(response)
       if (!response.ok) throw new Error("Failed to fetch data");
   
