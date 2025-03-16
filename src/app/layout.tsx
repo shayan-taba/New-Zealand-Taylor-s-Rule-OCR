@@ -13,15 +13,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "New Zealand OCR Taylor Rule Tool", // Consider a more descriptive title related to your content
-  description: "Explore RBNZ's Official Cash Rate (OCR) decisions by comparing it to the Taylor Rule in New Zealand's monetary policy. This website uses up-to-date data from the Reserve Bank of New Zealand to calculate theoretical optimal OCR values.", // Update this to be more specific to your content
-  keywords: "New Zealand, OCR, Taylor Rule, Inertial Taylor's Rule, optimal OCR, monetary policy, Reserve Bank of New Zealand, official cash rate, RBNZ", // Add relevant keywords
+  title: "NZ Taylor Rule Analysis Tool",
+  description: "Explore RBNZ's Official Cash Rate (OCR) decisions by comparing it to the Taylor Rule in New Zealand's monetary policy. This website uses up-to-date data from the Reserve Bank of New Zealand to calculate theoretical optimal OCR values.",
+  keywords: "New Zealand, OCR, Taylor Rule, Inertial Taylor's Rule, optimal OCR, monetary policy, Reserve Bank of New Zealand, official cash rate, RBNZ",
   authors: [{ name: "shayan-taba", url: "https://github.com/shayan-taba/New-Zealand-Taylor-s-Rule-OCR" }],
   openGraph: {
-    title: "New Zealand OCR Taylor Rule Tool",
+    title: "NZ Taylor Rule Analysis Tool",
     description: "Explore RBNZ's Official Cash Rate (OCR) decisions by comparing it to the Taylor Rule in New Zealand's monetary policy. This website uses up-to-date data from the Reserve Bank of New Zealand to calculate theoretical optimal OCR values.",
-    url: "https://yourdomain.com", // Replace with your actual URL
-    siteName: "New Zealand OCR Taylor Rule Tool",
+    url: "https://new-zealand-taylor-rule-ocr.vercel.app",
+    siteName: "NZ Taylor Rule Analysis Tool",
     type: "website",
   }
 };

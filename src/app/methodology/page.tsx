@@ -16,14 +16,13 @@ export default function Methodology() {
 
       {/* Introduction */}
       <Typography variant="body1" sx={{ mt: 2, lineHeight: 1.7 }}>
-        This website utilizes data from the Reserve Bank of New Zealand's (RBNZ)
-        {" "}
+        This website utilizes data from the Reserve Bank of New Zealand's (RBNZ){" "}
         <Link
           href="https://www.rbnz.govt.nz/-/media/project/sites/rbnz/files/publications/monetary-policy-statements/2025/feb-19224/mpsfeb25-data.xlsx"
           target="_blank"
         >
           February 2025 Monetary Policy Statement (MPS)
-        </Link> {" "}
+        </Link>{" "}
         to provide a theoretical benchmark for the Official Cash Rate (OCR).
         Using the Taylor Rule and Inertial Taylor Rule, it models how the OCR
         should respond to inflation and economic output changes. These
@@ -52,16 +51,18 @@ export default function Methodology() {
         <sub>
           t<sup>*</sup>
         </sub>
-        ) + a<sub>y</sub>(y<sub>t</sub>)
-        = <strong>r
-        <sub>
-          t<sup>n</sup>
-        </sub>{" "}
-        + a<sub>π</sub>(π<sub>t</sub> - π
-        <sub>
-          t<sup>*</sup>
-        </sub>
-        ) + a<sub>y</sub>(y<sub>t</sub>)</strong>
+        ) + a<sub>y</sub>(y<sub>t</sub>) ={" "}
+        <strong>
+          r
+          <sub>
+            t<sup>n</sup>
+          </sub>{" "}
+          + a<sub>π</sub>(π<sub>t</sub> - π
+          <sub>
+            t<sup>*</sup>
+          </sub>
+          ) + a<sub>y</sub>(y<sub>t</sub>)
+        </strong>
       </Box>
 
       <Typography variant="body1" sx={{ mt: 2 }}>
@@ -80,7 +81,8 @@ export default function Methodology() {
           <strong>
             π<sub>t</sub>
           </strong>
-          : Inflation rate (YoY % change in CPI) at time <em>t</em> (from <strong>papc</strong> in the MPS projections table)
+          : Inflation rate (YoY % change in CPI) at time <em>t</em> (from{" "}
+          <strong>papc</strong> in the MPS projections table)
         </Typography>
         <Typography variant="body2">
           <strong>
@@ -89,7 +91,9 @@ export default function Methodology() {
               t<sup>n</sup>
             </sub>
           </strong>
-          : Nominal long-term neutral interest rate (from <strong>Table 6.4</strong> of the MPS or the RBNZ "Finding Neutral" article)
+          : Nominal long-term neutral interest rate (from{" "}
+          <strong>Table 6.4</strong> of the MPS or the RBNZ "Finding Neutral"
+          article)
         </Typography>
         <Typography variant="body2">
           <strong>
@@ -107,7 +111,8 @@ export default function Methodology() {
           <strong>
             y<sub>t</sub>
           </strong>
-          : Output gap at time <em>t</em> (from <strong>outputgap</strong> in the MPS projections table)
+          : Output gap at time <em>t</em> (from <strong>outputgap</strong> in
+          the MPS projections table)
         </Typography>
         <Typography variant="body2">
           <strong>
@@ -142,16 +147,18 @@ export default function Methodology() {
         <sub>
           t<sup>*</sup>
         </sub>
-        ) + a<sub>y</sub>(y<sub>t</sub>) ] = <strong>
-        a<sub>i</sub> × i<sub>t-1</sub> + a<sub>t</sub> [ r
-        <sub>
-          t<sup>n</sup>
-        </sub>{" "}
-        + a<sub>π</sub>(π<sub>t</sub> - π
-        <sub>
-          t<sup>*</sup>
-        </sub>
-        ) + a<sub>y</sub>(y<sub>t</sub>) ] </strong>
+        ) + a<sub>y</sub>(y<sub>t</sub>) ] ={" "}
+        <strong>
+          a<sub>i</sub> × i<sub>t-1</sub> + a<sub>t</sub> [ r
+          <sub>
+            t<sup>n</sup>
+          </sub>{" "}
+          + a<sub>π</sub>(π<sub>t</sub> - π
+          <sub>
+            t<sup>*</sup>
+          </sub>
+          ) + a<sub>y</sub>(y<sub>t</sub>) ]{" "}
+        </strong>
       </Box>
 
       <Typography variant="body1" sx={{ mt: 2 }}>
@@ -189,11 +196,16 @@ export default function Methodology() {
         </Typography>
 
         <Typography variant="body1" sx={{ mt: 4 }}>
-        For more information on the use of monetary policy rules like the Taylor Rule, refer to this resource from the Federal Reserve:{" "}
-        <Link href="https://www.federalreserve.gov/monetarypolicy/policy-rules-and-how-policymakers-use-them.htm" target="_blank">
-          Policy Rules and How Policymakers Use Them
-        </Link>.
-      </Typography>
+          For more information on the use of monetary policy rules like the
+          Taylor Rule, refer to this resource from the Federal Reserve:{" "}
+          <Link
+            href="https://www.federalreserve.gov/monetarypolicy/policy-rules-and-how-policymakers-use-them.htm"
+            target="_blank"
+          >
+            Policy Rules and How Policymakers Use Them
+          </Link>
+          .
+        </Typography>
       </Stack>
 
       {/* Neutral Interest Rate */}
@@ -212,6 +224,18 @@ export default function Methodology() {
           "Finding Neutral" article
         </Link>
         , which provides two-decimal precision from 1997 to February 2024.
+      </Typography>
+
+      {/* Data and Rule Values Used for Calculations Section */}
+      <Typography variant="h5" sx={{ mt: 4, mb: 2, fontWeight: "medium" }}>
+        Data and Calculations:
+      </Typography>
+      <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+        The data used for the calculations of both the Inertial and Taylor's
+        OCR, including the values sourced from the latest RBNZ MPS, as well as
+        the calculated Taylor Rule and Inertial Rule values, are available for
+        download. Click the download button next to the table in the results
+        page to access the full dataset and the rule calculations.
       </Typography>
 
       {/* GitHub Link */}

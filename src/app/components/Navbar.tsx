@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from 'react';
-import { AppBar, Box, Toolbar, Button, IconButton } from '@mui/material';
+import { AppBar, Box, Toolbar, Button, IconButton, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 
@@ -15,6 +15,11 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+          {/* Descriptive Title */}
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            NZ Taylor Rule Analysis Tool
+          </Typography>
+
           {/* Navigation Buttons */}
           <Button
             onClick={() => router.push("/")}

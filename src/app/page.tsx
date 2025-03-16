@@ -1,6 +1,8 @@
 "use client";
-
+import jsFileDownload from "js-file-download";
 import { useEffect, useState } from "react";
+import { IconButton } from '@mui/material';
+import { Download } from "@mui/icons-material";  // Import the Download icon
 import { fetchData } from "@/lib/fetchData";
 import {
   Container,
@@ -250,6 +252,29 @@ export default function Home() {
   const graphData = generateGraphData(filteredData);
   //console.log("Graph Data:", graphData); // Log the data being passed to the graph
 
+  const handleDownload = () => {
+    const csvRows = [];
+    
+    // Get all keys from the first entry in the filtered data to use as headers
+    const headers = Object.keys(filteredData[0]);
+    csvRows.push(headers.join(","));
+    
+    // Iterate over each entry to create a row
+    filteredData.forEach((entry: any) => {
+      const row = headers.map((key) => {
+        const value = entry[key];
+        return value !== null && value !== undefined ? value.toString() : "-"; // Handle null/undefined values
+      });
+      csvRows.push(row.join(","));
+    });
+  
+    const csvString = csvRows.join("\n");
+    jsFileDownload(csvString, "filtered_data.csv");
+  };
+  
+  
+
+
   return (
     <Container>
       {/* Navbar */}
@@ -344,6 +369,15 @@ export default function Home() {
         </Box>
 
         {/* Table Section */}
+        <Box mb={4} display="flex" justifyContent="flex-start" gap={"1rem"} alignItems="center">
+          <Typography variant="h6" gutterBottom>
+            Data Table
+          </Typography>
+          <IconButton onClick={handleDownload} color="primary">
+            <Download />
+          </IconButton>
+        </Box>
+
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
