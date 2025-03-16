@@ -41,6 +41,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#ffffff" />
         {/* Other meta tags can go here */}
+        <meta name="google-site-verification" content="KPPeYkPI6FlhfcKQ7rDPc-SmnDF9EEGFH67BPct68ao" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
