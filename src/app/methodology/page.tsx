@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 
 export default function Methodology() {
   return (
-    <Container maxWidth="md">
+    <Container /*maxWidth="md"*/>
       {/* Navbar */}
       <Navbar />
 
