@@ -1,43 +1,51 @@
-// app/components/Navbar.tsx
-
 "use client";
 
-import { AppBar, Button, Toolbar } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import * as React from 'react';
+import { AppBar, Box, Toolbar, Button, IconButton } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const router = useRouter();
-  const [activePage, setActivePage] = useState<string>('');
+  const pathname = usePathname(); // To determine the current route
 
-  useEffect(() => {
-    setActivePage(window.location.pathname);
-  }, []);
+  const isActive = (path: string) => pathname === path;
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Button
-          color="inherit"
-          onClick={() => router.push("/")}
-          sx={{
-            backgroundColor: activePage === "/" ? "rgba(255, 255, 255, 0.1)" : "transparent",
-            color: activePage === "/" ? "white" : "inherit",
-          }}
-        >
-          Results
-        </Button>
-        <Button
-          color="inherit"
-          onClick={() => router.push("/methodology")}
-          sx={{
-            backgroundColor: activePage === "/methodology" ? "rgba(255, 255, 255, 0.1)" : "transparent",
-            color: activePage === "/methodology" ? "white" : "inherit",
-          }}
-        >
-          Methodology
-        </Button>
-      </Toolbar>
-    </AppBar>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          {/* Navigation Buttons */}
+          <Button
+            onClick={() => router.push("/")}
+            sx={{
+              textTransform: "none",
+              color: "white",
+              borderBottom: isActive("/") ? `2px solid #f5f5f5` : "none", // Add underline for active page
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)", // Highlight on hover
+              },
+            }}
+          >
+            Results
+          </Button>
+          <Button
+            onClick={() => router.push("/methodology")}
+            sx={{
+              textTransform: "none",
+              color: "white",
+              ml: 2, // Margin left to space buttons
+              borderBottom: isActive("/methodology") ? `2px solid #f5f5f5` : "none", // Add underline for active page
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)", // Highlight on hover
+              },
+            }}
+          >
+            Methodology
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }
