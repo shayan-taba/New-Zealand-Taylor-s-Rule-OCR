@@ -170,7 +170,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchData().then((result: any) => {
-      console.log("Fetched Data:", result); // Log the raw fetched data
+      //console.log("Fetched Data:", result); // Log the raw fetched data
 
       const updatedData = result.map((entry: DataEntry) => ({
         ...entry,
@@ -178,12 +178,12 @@ export default function Home() {
         inertialOCR: null,
       }));
 
-      console.log("Updated Data with Default OCRs:", updatedData); // Log the updated data with default nulls for OCRs
+      //console.log("Updated Data with Default OCRs:", updatedData); // Log the updated data with default nulls for OCRs
 
       let prevOCR: number | null = null;
 
       const dataWithOCR = updatedData.map((entry: DataEntry, index: number) => {
-        console.log(`Processing entry for ${entry.quarter}:`, entry); // Log the entire entry
+        //console.log(`Processing entry for ${entry.quarter}:`, entry); // Log the entire entry
       
         const targetInflation = entry.mandateType.midpoint;
         const inflationRate = entry.papc || 0;
@@ -198,7 +198,7 @@ export default function Home() {
           entry.longTermNominalNIR,
           targetInflation
         );
-        console.log(`Taylor OCR for ${entry.quarter}:`, taylorOCR); // Log the calculated Taylor OCR
+        //console.log(`Taylor OCR for ${entry.quarter}:`, taylorOCR); // Log the calculated Taylor OCR
       
         const inertialOCR = calculateInertialTaylorOCR(
           prevOCR,
@@ -208,7 +208,7 @@ export default function Home() {
           targetInflation,
           entry.ocr
         );
-        console.log(`Inertial OCR for ${entry.quarter}:`, inertialOCR); // Log the calculated Inertial OCR
+        //console.log(`Inertial OCR for ${entry.quarter}:`, inertialOCR); // Log the calculated Inertial OCR
       
         prevOCR = entry.ocr;
       
@@ -220,7 +220,7 @@ export default function Home() {
       });
       
 
-      console.log("Final Data with OCR Calculations:", dataWithOCR); // Log the final data with OCRs added
+      //console.log("Final Data with OCR Calculations:", dataWithOCR); // Log the final data with OCRs added
 
       setData(dataWithOCR);
       setLoading(false);
@@ -248,7 +248,7 @@ export default function Home() {
   }, [startQuarter, endQuarter, data]);
 
   const graphData = generateGraphData(filteredData);
-  console.log("Graph Data:", graphData); // Log the data being passed to the graph
+  //console.log("Graph Data:", graphData); // Log the data being passed to the graph
 
   return (
     <Container>
