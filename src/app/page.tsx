@@ -21,8 +21,8 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,

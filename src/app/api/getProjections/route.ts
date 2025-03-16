@@ -103,7 +103,6 @@ export async function GET() {
         // Load and parse NIR data from the CSV file
         const nirFilePath = path.join(process.cwd(), "public", "NIR.csv");
         const nirDataMap = await parseNIRData(nirFilePath);
-        console.log(nirDataMap)
 
         // Extract data from row 8 onward
         const extractedData = rawData.slice(7).map((row: any): {
@@ -130,9 +129,7 @@ export async function GET() {
             const isProjection = date >= projectionStartDate;
 
             // Get the Long-term NIR value for this date from the CSV data
-            console.log(dateStr, date.toISOString().split('T')[0])
             const longTermNominalNIR = nirDataMap.get(date.toISOString().split('T')[0]) || null;
-            console.log("hey", longTermNominalNIR)
             return {
                 date: date,
                 ocr: row[ocrIndex] || null,
@@ -148,7 +145,6 @@ export async function GET() {
 
         // Filter out projections
         const nonProjectionData = extractedData.filter(entry => !entry.isProjection);
-        console.log(nonProjectionData);
 
         return NextResponse.json({ success: true, data: nonProjectionData });
     } catch (error) {

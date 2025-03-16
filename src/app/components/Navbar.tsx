@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { AppBar, Box, Toolbar, Button, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 

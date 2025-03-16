@@ -1,6 +1,6 @@
 import { Container, Typography, Link, Box, Grid } from "@mui/material";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function Methodology() {
   return (
