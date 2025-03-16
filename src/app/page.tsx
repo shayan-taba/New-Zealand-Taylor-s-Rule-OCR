@@ -245,7 +245,7 @@ export default function Home() {
           Results
         </Typography>
 
-        <Box mb={4}>
+        {/*<Box mb={4}>
           <Typography variant="h6" paragraph>
             <strong>Taylor Rule Equation:</strong>
           </Typography>
@@ -266,7 +266,7 @@ export default function Home() {
             <sup>n</sup> + a<sub>π</sub>(π<sub>t</sub> - π<sub>t</sub>
             <sup>∗</sup>) + a<sub>y</sub>y<sub>t</sub>]
           </Typography>
-        </Box>
+        </Box>*/}
 
         {/* Quarter Picker Section */}
         <Box
