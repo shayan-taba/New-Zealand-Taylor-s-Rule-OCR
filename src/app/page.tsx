@@ -170,11 +170,15 @@ export default function Home() {
 
   useEffect(() => {
     fetchData().then((result: any) => {
+      console.log("Fetched Data:", result); // Log the raw fetched data
+
       const updatedData = result.map((entry: DataEntry) => ({
         ...entry,
         taylorOCR: null,
         inertialOCR: null,
       }));
+
+      console.log("Updated Data with Default OCRs:", updatedData); // Log the updated data with default nulls for OCRs
 
       let prevOCR: number | null = null;
 
@@ -189,6 +193,8 @@ export default function Home() {
           targetInflation
         );
 
+        console.log(`Taylor OCR for ${entry.quarter}:`, taylorOCR); // Log the calculated Taylor OCR
+
         const inertialOCR = calculateInertialTaylorOCR(
           prevOCR,
           inflationRate,
@@ -198,6 +204,8 @@ export default function Home() {
           entry.ocr
         );
 
+        console.log(`Inertial OCR for ${entry.quarter}:`, inertialOCR); // Log the calculated Inertial OCR
+
         prevOCR = entry.ocr;
 
         return {
@@ -206,6 +214,8 @@ export default function Home() {
           inertialOCR,
         };
       });
+
+      console.log("Final Data with OCR Calculations:", dataWithOCR); // Log the final data with OCRs added
 
       setData(dataWithOCR);
       setLoading(false);
@@ -233,6 +243,7 @@ export default function Home() {
   }, [startQuarter, endQuarter, data]);
 
   const graphData = generateGraphData(filteredData);
+  console.log("Graph Data:", graphData); // Log the data being passed to the graph
 
   return (
     <Container>
