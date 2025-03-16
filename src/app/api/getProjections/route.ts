@@ -132,6 +132,7 @@ export async function GET() {
 
             // Get the Long-term NIR value for this date from the CSV data
             const longTermNominalNIR = nirDataMap.get(date.toISOString().split('T')[0]) || null;
+            console.log("gotten", longTermNominalNIR, date.toISOString().split('T')[0], date)
             return {
                 date: date,
                 ocr: row[ocrIndex] || null,
