@@ -162,7 +162,7 @@ export async function GET() {
         quarter,
         outputGap: row[outputGapIndex] || null,
         papc: row[papcIndex] || null,
-        //isProjection,
+        isProjection,
         longTermNominalNIR,
         mandateType: { range, lower, upper, midpoint, mandate },
         taylorOCR,
