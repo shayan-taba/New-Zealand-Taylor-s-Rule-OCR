@@ -121,9 +121,10 @@ export async function GET() {
     const dateIndex = 0; // Dates are in column 1 (index 0)
     const outputGapIndex = headers.indexOf("outputgap");
     const papcIndex = headers.indexOf("papc");
+    const urateIndex = headers.indexOf("urate");
     const ocrIndex = headers.indexOf("ocr");
 
-    if (outputGapIndex === -1 || papcIndex === -1) {
+    if (outputGapIndex === -1 || papcIndex === -1 || urateIndex ==- -1) {
       throw new Error("Required columns not found in row 7");
     }
 
@@ -162,6 +163,7 @@ export async function GET() {
         quarter,
         outputGap: row[outputGapIndex] || null,
         papc: row[papcIndex] || null,
+        urate: row[urateIndex] || null,
         isProjection,
         longTermNominalNIR,
         mandateType: { range, lower, upper, midpoint, mandate },

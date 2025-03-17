@@ -52,7 +52,8 @@ type DataEntry = {
   date: string; // YYYY-MM-DD
   quarter: string;
   outputGap: number | null;
-  papc: number | null;
+  papc: number /*| null*/;
+  urate: number | null;
   //isProjection: boolean;
   ocr: number | null;
   longTermNominalNIR: number | null;
@@ -73,6 +74,9 @@ const generateGraphData = (data: DataEntry[]) => {
   const ocrData = data.map((entry) => entry.ocr ?? 0); // Use 0 for undefined OCR values
   const taylorOCRData = data.map((entry) => entry.taylorOCR ?? 0); // Use 0 for undefined Taylor OCR values
   const inertialOCRData = data.map((entry) => entry.inertialOCR ?? 0); // Use 0 for undefined Inertial OCR values
+  const papcData = data.map((entry) => entry.papc - entry.mandateType.midpoint);
+  const urateData = data.map((entry) => entry.urate ?? 0);
+  const outputGapData = data.map((entry) => entry.outputGap ?? 0);
 
   return {
     labels,
@@ -97,6 +101,30 @@ const generateGraphData = (data: DataEntry[]) => {
         borderColor: "rgb(153, 102, 255)",
         backgroundColor: "rgba(153, 102, 255, 0.2)",
         fill: true,
+      },
+      {
+        label: "Difference of Headline CPI from Midpoint Target",
+        data: papcData,
+        borderColor: "rgba(17, 86, 55, 0.2)",
+        backgroundColor: "rgba(17, 86, 55, 0.25)",
+        fill: true,
+        hidden: true,
+      },
+      {
+        label: "Output Gap",
+        data: outputGapData,
+        borderColor: "rgba(86, 81, 17, 0.2)",
+        backgroundColor: "rgba(86, 81, 17, 0.25)",
+        fill: true,
+        hidden: true,
+      },
+      {
+        label: "Unemployment Rate",
+        data: urateData,
+        borderColor: "rgba(86, 17, 66, 0.2)",
+        backgroundColor: "rgba(86, 17, 66 , 0.25)",
+        fill: true,
+        hidden: true,
       },
     ],
   };
@@ -268,7 +296,7 @@ export default function Home() {
                 y: {
                   title: {
                     display: true,
-                    text: "Nominal OCR (%)", // Axis label
+                    text: "%", // Axis label
                     font: {
                       size: 14,
                       weight: "bold",

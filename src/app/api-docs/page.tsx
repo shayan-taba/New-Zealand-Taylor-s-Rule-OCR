@@ -127,6 +127,7 @@ export default function APIDocumentation() {
       "quarter": string,  // "Q1 2000", "Q2 2000", etc.
       "outputGap": number,  // float
       "papc": number,  // float
+      "urate": number,  // float
       "longTermNominalNIR": number,  // float
       "mandateType": {
         "range": string,  // e.g., "1-3%"
@@ -212,6 +213,15 @@ export default function APIDocumentation() {
         <Typography variant="body2">
           <strong>papc</strong>: The annual percentage change in CPI in a given
           quarter.
+          <br />
+          <strong>Data type:</strong>{" "}
+          <Box sx={{ fontFamily: "monospace" }}>float</Box>
+        </Typography>
+
+        {/* urate */}
+        <Typography variant="body2">
+          <strong>urate</strong>: The seasonally adjusted unemployment rate from
+          the "urate" identifier of the MPS.
           <br />
           <strong>Data type:</strong>{" "}
           <Box sx={{ fontFamily: "monospace" }}>float</Box>
